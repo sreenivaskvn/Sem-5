@@ -13,7 +13,10 @@ using namespace std;
 void sig_handler(int signo)
 {
   	if (signo == SIGINT){
-  		// Do nothing
+  		// Do nothing.
+  		// We want the parent i.e client-shell to keep on running even if a SIGINT is encountered. Hence we
+  		// need to overwrite.
+  		// But we need the child process to be killed.
 	}
 }
 
@@ -169,7 +172,5 @@ int main()
         }
        	free(tokens);
     } 
-     
-
 }
 
