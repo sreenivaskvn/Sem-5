@@ -24,7 +24,7 @@ int main(int argc, char*argv[]){
 	for(int i=4;i<strlen(argv[1])+4;i++){
 		filename[i] = argv[1][i-4];
 	}
-	// filename[4+sizeof(argv[1])] = '\0';
+	filename[4+strlen(argv[1])] = '\0';
 	// printf("%s %d\n",argv[1], strlen(argv[1]) );
 	// for(int i=0;filename[i] != '\0' && i<100;i++){
 	// 	cout<<filename[i];
@@ -51,7 +51,7 @@ int main(int argc, char*argv[]){
 		return 0;
 	}
 
-	int sendfilename = send(sock_fd, filename, 100, 0);
+	int sendfilename = write(sock_fd, filename, strlen(filename));
 	int num_bytes_received = 0;
 
 	while(1){
