@@ -17,9 +17,8 @@ using namespace std;
 void * reap(void*i){
     int pid = *((int*)i);
     int status;
-   // cout<<"reaped\n";
-    pid_t w = waitpid(-1, &status, 0);
-   // cout<<"reaped bro\n";
+    pid_t w = waitpid(-1, &status, 0); // -1 is for any process that is a child
+              // Need not lock. waitpid is  thread-safe
 }
 
 int main(int argc, char** argv){
@@ -83,12 +82,13 @@ int main(int argc, char** argv){
             }
             continue;
         }else{
-            filename_len = recv(sock_fd, filename, sizeof(filename), 0);
+            filename_len = read(sock_fd, filename, 50);
             if (filename_len == -1) {
               fprintf(stderr, "recv failed: %s\n", strerror(errno));
               exit(1);
             }
             filename[filename_len] = '\0';
+            printf("%s\n",filename );
             string extract(filename);
             for(int i=4;i<filename_len+1;i++){
                 filename[i-4] = extract[i];
@@ -104,18 +104,14 @@ int main(int argc, char** argv){
             string s = to_string(numbytes_to_be_sent);
             offset = 0;
             while(numbytes_to_be_sent > 0){
-                //cout<<"The size remaining : "<<numbytes_to_be_sent<<endl;
-                numbytes_sent = sendfile(sock_fd, fd, &offset, numbytes_to_be_sent);
-                //cout<<numbytes_sent<<endl;
+                cout<<"The size remaining : "<<numbytes_to_be_sent<<endl;
+                numbytes_sent = sendfile(sock_fd, fd, &offset, 512);
                 numbytes_to_be_sent -= numbytes_sent;
-                //cout<<"Offset now is : "<<offset<<endl;
+                sleep(1);
             }
             if(close(sock_fd)<0){
                 perror("socket close error");
                 exit(EXIT_FAILURE);
-            }
-            else{
-                //cout<<"socket "<<sock_fd<<" closed\n";
             }
             return 0; // This child should exit
         }
