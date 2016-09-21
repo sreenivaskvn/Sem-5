@@ -1,0 +1,8 @@
+1. Added dummy.c in /xv6/
+2. Created dummy() syscall. Search for dummy using 'grep -n dummy *.[chS]' in /xv6/
+3. Created setprio(int) syscall. Defined the actual content of the function 
+   and function declaration in 'proc.c'.
+   Search for it using 'grep -n setprio *.[chS]' in /xv6/
+4. Created getprio() syscall. Search for it using 'grep -n *.[chS]' in /xv6/
+5. An extra entry 'priority' in struct proc{} of 'proc.c'.
+6. Extra line in allocproc() function of 'proc.c' which sets process priority to 1. 
